@@ -5,7 +5,7 @@ namespace lab2_threads
 {
     class Program
     {
-        private static readonly int numOfElements = 10;
+        private static readonly int numOfElements = 1000000;
         private static readonly int numOfThreads = 2;
 
         private readonly Thread[] thread = new Thread[numOfThreads];
@@ -54,10 +54,13 @@ namespace lab2_threads
         private Result ParallelSearch()
         {
             int step = numOfElements / numOfThreads;
+
             for (int i = 0; i < numOfThreads; i++)
             {
+                int start = i * step;
+                int end = (i == numOfThreads - 1) ? numOfElements : (i + 1) * step;
                 thread[i] = new Thread(StarterThread);
-                thread[i].Start(new Bound(i * step, i * step + step));
+                thread[i].Start(new Bound(start, end));
             }
 
             lock (lockerForCount)
